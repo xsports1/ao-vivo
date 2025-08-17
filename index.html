@@ -2,47 +2,79 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>IPTV Player - X SPORTS</title>
+  <title>Mini IPTV Player - X SPORTS</title>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
-    html, body {
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
       background: black;
-      display: flex;
-      flex-direction: column;
+      color: white;
+      font-family: Arial, sans-serif;
     }
     #video {
       width: 100%;
-      height: calc(100% - 50px);
+      height: 60vh;
+      background: black;
     }
-    #recarregarBtn {
-      height: 50px;
-      font-size: 18px;
+    #controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px;
+      background: #111;
+    }
+    #channels {
+      flex-grow: 1;
+    }
+    button {
+      margin-left: 5px;
+      padding: 5px 10px;
       background: #222;
       color: #fff;
       border: none;
       cursor: pointer;
+    }
+    button:hover {
+      background: #555;
     }
   </style>
 </head>
 <body>
 
   <video id="video" controls autoplay></video>
-  <button id="recarregarBtn" onclick="recarregar()">Recarregar</button>
+
+  <div id="controls">
+    <select id="channels"></select>
+    <div>
+      <button onclick="recarregar()">Recarregar</button>
+    </div>
+  </div>
 
   <script>
-    var video = document.getElementById('video');
-    var canal = 'X SPORTS';
-    var stream = 'https://zplivecdn.live/live/esdras1/esdras1/48351.ts'; // link do canal
+    const video = document.getElementById('video');
+    const channelsSelect = document.getElementById('channels');
 
-    function carregarCanal() {
+    // Lista de canais
+    const canais = [
+      {name: 'X SPORTS', url: 'http://intx.foo/live/Cida0998/ck843724/323423.ts'}
+    ];
+
+    // Preencher lista de canais
+    canais.forEach((c, index) => {
+      const option = document.createElement('option');
+      option.value = index;
+      option.textContent = c.name;
+      channelsSelect.appendChild(option);
+    });
+
+    function carregarCanal(index = 0) {
+      const stream = canais[index].url;
       if(Hls.isSupported()) {
         var hls = new Hls();
         hls.loadSource(stream);
         hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED,function() {
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
           video.play();
         });
       } else if(video.canPlayType('application/vnd.apple.mpegurl')) {
@@ -55,13 +87,26 @@
       }
     }
 
-    function recarregar() {
+    function trocarCanal() {
+      const index = channelsSelect.value;
       video.pause();
       video.currentTime = 0;
-      carregarCanal();
+      carregarCanal(index);
     }
 
-    carregarCanal();
+    function recarregar() {
+      const index = channelsSelect.value;
+      video.pause();
+      video.currentTime = 0;
+      carregarCanal(index);
+    }
+
+    // Eventos
+    channelsSelect.addEventListener('change', trocarCanal);
+
+    // Carrega primeiro canal
+    carregarCanal(0);
+
   </script>
 
 </body>
