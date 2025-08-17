@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎬 X SPORTS - IPTV</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    #video {
+      width: 100%;
+      height: 80vh;
+      background: black;
+    }
+    #controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      background: #222;
+    }
+    button {
+      padding: 10px 20px;
+      background: #444;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin: 0 10px;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <video id="video" controls autoplay></video>
+
+  <div id="controls">
+    <button onclick="recarregar()">🔄 Recarregar</button>
+  </div>
+
+  <script>
+    const video = document.getElementById('video');
+    const streamUrl = 'http://intx.foo/live/Cida0998/ck843724/323423.ts';
+
+    function carregarCanal() {
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(streamUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play();
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streamUrl;
+        video.addEventListener('loadedmetadata', () => {
+          video.play();
+        });
+      } else {
+        alert('Seu navegador não suporta HLS.');
+      }
+    }
+
+    function recarregar() {
+      video.pause();
+      video.currentTime = 0;
+      carregarCanal();
+    }
+
+    // Carregar o canal ao inicializar
+    carregarCanal();
+  </script>
+
+</body>
+</html>
