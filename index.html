@@ -33,7 +33,7 @@
 
     <script>
       var video = document.getElementById('video');
-      var videoSrc = 'https://zplivecdn.live/live/esdras1/esdras1/48351.ts'; // Link do X SPORTS
+      var videoSrc = 'https://zplivecdn.live/live/esdras1/esdras1/48351.ts';
 
       function carregarVideo() {
         if(Hls.isSupported()) {
@@ -49,7 +49,7 @@
             video.play();
           });
         } else {
-          alert('Seu navegador/app não suporta este formato.');
+          alert('Seu navegador não suporta este formato.');
         }
       }
 
