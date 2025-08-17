@@ -1,65 +1,68 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>X SPORTS</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        background: black;
-        display: flex;
-        flex-direction: column;
-      }
-      #video {
-        width: 100%;
-        height: calc(100% - 50px);
-      }
-      #recarregarBtn {
-        height: 50px;
-        font-size: 18px;
-        background: #222;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <video id="video" controls autoplay></video>
-    <button id="recarregarBtn" onclick="recarregar()">Recarregar</button>
+<head>
+  <meta charset="UTF-8">
+  <title>IPTV Player - X SPORTS</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: black;
+      display: flex;
+      flex-direction: column;
+    }
+    #video {
+      width: 100%;
+      height: calc(100% - 50px);
+    }
+    #recarregarBtn {
+      height: 50px;
+      font-size: 18px;
+      background: #222;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
 
-    <script>
-      var video = document.getElementById('video');
-      var videoSrc = 'https://zplivecdn.live/live/esdras1/esdras1/48351.ts';
+  <video id="video" controls autoplay></video>
+  <button id="recarregarBtn" onclick="recarregar()">Recarregar</button>
 
-      function carregarVideo() {
-        if(Hls.isSupported()) {
-          var hls = new Hls();
-          hls.loadSource(videoSrc);
-          hls.attachMedia(video);
-          hls.on(Hls.Events.MANIFEST_PARSED,function() {
-            video.play();
-          });
-        } else if(video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = videoSrc;
-          video.addEventListener('loadedmetadata', function() {
-            video.play();
-          });
-        } else {
-          alert('Seu navegador não suporta este formato.');
-        }
+  <script>
+    var video = document.getElementById('video');
+    var canal = 'X SPORTS';
+    var stream = 'https://zplivecdn.live/live/esdras1/esdras1/48351.ts'; // link do canal
+
+    function carregarCanal() {
+      if(Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(stream);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED,function() {
+          video.play();
+        });
+      } else if(video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = stream;
+        video.addEventListener('loadedmetadata', function() {
+          video.play();
+        });
+      } else {
+        alert('Seu navegador não suporta HLS.');
       }
+    }
 
-      function recarregar() {
-        video.pause();
-        video.currentTime = 0;
-        carregarVideo();
-      }
+    function recarregar() {
+      video.pause();
+      video.currentTime = 0;
+      carregarCanal();
+    }
 
-      carregarVideo();
-    </script>
-  </body>
+    carregarCanal();
+  </script>
+
+</body>
 </html>
